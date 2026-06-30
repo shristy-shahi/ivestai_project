@@ -38,7 +38,7 @@ function ParticleWave() {
   return (
     <points position={[0, -2, 0]}>
       <bufferGeometry ref={geometryRef}>
-        <bufferAttribute attach="attributes-position" count={positions.length / 3} array={positions} itemSize={3} />
+        <bufferAttribute attach="attributes-position" count={positions.length / 3} array={positions} itemSize={3} args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial 
         size={0.035} 
