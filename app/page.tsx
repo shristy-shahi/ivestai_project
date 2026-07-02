@@ -20,20 +20,6 @@ import {
   ArrowRight, ChevronDown
 } from "lucide-react";
 
-const StockMarketScene = dynamic(
-  () => import("@/components/hero/StockMarketScene"),
-  {
-    ssr: false,
-    loading: () => (
-      <div
-        style={{
-          position: "absolute", inset: 0,
-          background: "radial-gradient(ellipse at 50% 40%, rgba(59,130,246,0.06) 0%, transparent 70%)",
-        }}
-      />
-    ),
-  }
-);
 
 const FEATURES = [
   { Icon: BarChart3, label: "Live Agent Visualization", desc: "Pipeline nodes light up in real time as each agent completes its analysis.", color: "var(--primary)" },
@@ -94,7 +80,30 @@ export default function Home() {
                 style={{ position: "absolute", inset: 0, opacity: 0.4, pointerEvents: "none" }}
               />
 
-              <StockMarketScene />
+              {/* Elegant, lightweight radial glow background */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.12) 0%, transparent 60%)",
+                  pointerEvents: "none",
+                }}
+              />
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  top: "20%",
+                  left: "20%",
+                  width: "60vw",
+                  height: "60vw",
+                  background: "radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 50%)",
+                  filter: "blur(40px)",
+                  pointerEvents: "none",
+                  transform: "translate(-50%, -50%)",
+                }}
+              />
 
               {/* Bottom fade */}
               <div
@@ -136,7 +145,7 @@ export default function Home() {
                         letterSpacing: "0.1em", textTransform: "uppercase",
                       }}
                     >
-                      Multi-Agent AI · 7 Nodes · Live
+                      Institutional-grade research, automated
                     </span>
                   </div>
                 </motion.div>
@@ -148,10 +157,8 @@ export default function Home() {
                   transition={{ delay: 0.25, type: "spring", stiffness: 90 }}
                   style={{ textAlign: "center", maxWidth: 820, color: "var(--text-primary)" }}
                 >
-                  Your AI{" "}
-                  <span className="gradient-text">Investment</span>
-                  <br />
-                  Research Analyst
+                  Institutional-grade research,{" "}
+                  <span className="gradient-text">delivered in seconds.</span>
                 </motion.h1>
 
                 <motion.p
@@ -161,8 +168,7 @@ export default function Home() {
                   transition={{ delay: 0.35, type: "spring", stiffness: 90 }}
                   style={{ marginTop: 20, fontSize: 17, maxWidth: 500, textAlign: "center" }}
                 >
-                  Enter any public company. 7 specialist AI agents research it and
-                  deliver an{" "}
+                  Enter any public company. Our platform analyzes fundamentals, sentiment, and market data to deliver a clear{" "}
                   <strong style={{ color: "var(--text-primary)", fontWeight: 700 }}>
                     INVEST / PASS
                   </strong>{" "}
@@ -173,15 +179,52 @@ export default function Home() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.45, type: "spring", stiffness: 100 }}
-                  style={{ display: "flex", gap: 12, marginTop: 32, pointerEvents: "auto" }}
+                  style={{ display: "flex", gap: 14, marginTop: 36, pointerEvents: "auto" }}
                 >
-                  <a href="#research" className="btn btn-primary btn-lg" style={{ textDecoration: "none" }}>
+                  <a
+                    href="#research"
+                    className="btn btn-primary btn-lg"
+                    style={{ textDecoration: "none" }}
+                  >
                     Start Analysing
                     <ArrowRight size={16} />
                   </a>
                   <a href="/about" className="btn btn-ghost btn-lg" style={{ textDecoration: "none" }}>
                     How it works
                   </a>
+                </motion.div>
+
+                {/* Trust strip — clean inline text, no boxes */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.7, duration: 0.6 }}
+                  style={{
+                    marginTop: 40, pointerEvents: "auto",
+                    display: "flex", alignItems: "center", gap: 16,
+                    flexWrap: "wrap", justifyContent: "center",
+                  }}
+                >
+                  {[
+                    "7 AI Agents",
+                    "< 60 second analysis",
+                    "100+ data points",
+                  ].map((text, i) => (
+                    <span key={i} style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                      <span style={{
+                        fontSize: 13, color: "var(--text-tertiary)", fontWeight: 500,
+                        letterSpacing: "0.01em",
+                      }}>
+                        {text}
+                      </span>
+                      {i < 2 && (
+                        <span style={{
+                          width: 3, height: 3, borderRadius: "50%",
+                          background: "var(--text-tertiary)", opacity: 0.5,
+                        }} />
+                      )}
+                    </span>
+                  ))}
                 </motion.div>
               </div>
 
@@ -385,15 +428,32 @@ export default function Home() {
                   {FEATURES.map(({ Icon, label, desc, color }, i) => (
                     <RevealOnScroll key={label} direction="up" delay={i * 0.06}>
                       <div
-                        className="card card-hover"
-                        style={{ borderLeft: `3px solid ${color}`, paddingLeft: 20 }}
+                        className="card card-hover card-tilt"
+                        style={{
+                          borderLeft: `3px solid ${color}`,
+                          paddingLeft: 20,
+                          position: "relative",
+                          overflow: "hidden",
+                        }}
                       >
+                        {/* Subtle gradient overlay on hover */}
+                        <div
+                          aria-hidden="true"
+                          style={{
+                            position: "absolute", inset: 0, opacity: 0,
+                            background: `linear-gradient(135deg, ${color}08 0%, transparent 60%)`,
+                            transition: "opacity 0.4s ease",
+                            pointerEvents: "none",
+                          }}
+                          className="card-hover-overlay"
+                        />
                         <div
                           style={{
                             width: 40, height: 40, borderRadius: "var(--radius-md)",
                             background: `${color}18`,
                             display: "flex", alignItems: "center", justifyContent: "center",
                             marginBottom: 14,
+                            transition: "transform 0.3s var(--ease-spring), box-shadow 0.3s ease",
                           }}
                         >
                           <Icon size={18} color={color} />
@@ -413,6 +473,36 @@ export default function Home() {
             <MoreFeatures />
             <Testimonials />
             <FAQ />
+
+            {/* ── CTA SECTION ─────────────────────────────────────────── */}
+            <section className="cta-section" style={{ padding: "96px 24px" }}>
+              <div style={{ maxWidth: 600, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
+                <RevealOnScroll direction="scale">
+                  <h2 className="text-display-sm" style={{ marginBottom: 16 }}>
+                    Ready to make smarter{" "}
+                    <span className="gradient-text">investment</span> decisions?
+                  </h2>
+
+                  <p className="text-body" style={{ maxWidth: 440, margin: "0 auto 36px", fontSize: 15 }}>
+                    Enter any public company and get an institutional-grade analysis in under 60 seconds. No credit card required.
+                  </p>
+
+                  <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
+                    <a
+                      href="#research"
+                      className="btn btn-primary btn-lg"
+                      style={{ textDecoration: "none" }}
+                    >
+                      Try it free
+                      <ArrowRight size={16} />
+                    </a>
+                    <a href="/pricing" className="btn btn-ghost btn-lg" style={{ textDecoration: "none" }}>
+                      View Pricing
+                    </a>
+                  </div>
+                </RevealOnScroll>
+              </div>
+            </section>
 
             <div className="section-divider" aria-hidden="true" />
             <Footer />

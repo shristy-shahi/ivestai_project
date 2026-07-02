@@ -220,16 +220,26 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
 }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+.btn:active:not(:disabled) { transform: scale(0.97); }
 
 .btn-primary {
-  background: var(--primary);
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(59,130,246,0.35);
+  box-shadow: 0 4px 16px rgba(59,130,246,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
 }
 .btn-primary:hover:not(:disabled) {
-  background: #2563EB;
-  box-shadow: 0 8px 24px rgba(59,130,246,0.5);
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+  box-shadow: 0 8px 32px rgba(59,130,246,0.55), inset 0 1px 0 rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+.btn-primary::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.12) 50%, transparent 60%);
+  background-size: 300% 300%;
+  animation: btn-shimmer 3s ease infinite;
+  pointer-events: none;
 }
 
 .btn-ghost {
@@ -241,6 +251,8 @@ a { color: inherit; text-decoration: none; }
   background: var(--bg-elevated);
   border-color: var(--border-hover);
   color: var(--text-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .btn-outline {
@@ -251,16 +263,19 @@ a { color: inherit; text-decoration: none; }
 .btn-outline:hover:not(:disabled) {
   background: var(--primary-dim);
   border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(59,130,246,0.15);
+  transform: translateY(-1px);
 }
 
 .btn-success {
-  background: var(--success);
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(16,185,129,0.3);
+  box-shadow: 0 4px 16px rgba(16,185,129,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 .btn-success:hover:not(:disabled) {
-  background: #059669;
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #34D399 0%, #10B981 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(16,185,129,0.4);
 }
 
 .btn-danger {
@@ -270,10 +285,13 @@ a { color: inherit; text-decoration: none; }
 }
 .btn-danger:hover:not(:disabled) {
   background: rgba(244,63,94,0.2);
+  border-color: rgba(244,63,94,0.5);
+  transform: translateY(-1px);
 }
 
 .btn-sm { padding: 6px 14px; font-size: 12px; border-radius: var(--radius-sm); }
 .btn-lg { padding: 14px 28px; font-size: 16px; border-radius: var(--radius-lg); }
+.btn-xl { padding: 18px 36px; font-size: 17px; border-radius: var(--radius-lg); font-weight: 700; }
 .btn-full { width: 100%; }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -548,6 +566,108 @@ a { color: inherit; text-decoration: none; }
 @keyframes ring-fill {
   from { stroke-dashoffset: 283; }
   to   { stroke-dashoffset: var(--target-offset, 0); }
+}
+
+/* ── NEW: Button shimmer sweep ──────────────────────── */
+@keyframes btn-shimmer {
+  0%   { background-position: 200% 200%; }
+  100% { background-position: -200% -200%; }
+}
+
+/* ── NEW: Logo trend line draw-in ─────────────────── */
+.logo-trend-line {
+  stroke-dasharray: 40;
+  stroke-dashoffset: 40;
+  animation: logo-draw 1.8s ease forwards, logo-pulse 3s ease-in-out 1.8s infinite;
+}
+@keyframes logo-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes logo-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ── NEW: Magnetic tilt card ────────────────────────── */
+.card-tilt {
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease;
+}
+.card-tilt:hover {
+  transform: perspective(800px) rotateX(-2deg) rotateY(2deg) translateY(-4px);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(59,130,246,0.08);
+}
+
+/* ── NEW: Border glow animation ─────────────────────── */
+@keyframes border-glow {
+  0%   { border-color: rgba(59,130,246,0.2); }
+  50%  { border-color: rgba(139,92,246,0.35); }
+  100% { border-color: rgba(59,130,246,0.2); }
+}
+.card-glow-animated {
+  animation: border-glow 4s ease-in-out infinite;
+}
+
+/* ── NEW: Ripple effect for buttons ──────────────────── */
+@keyframes ripple-expand {
+  0%   { transform: scale(0); opacity: 0.35; }
+  100% { transform: scale(4); opacity: 0; }
+}
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+.btn-ripple .ripple-circle {
+  position: absolute;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  animation: ripple-expand 0.6s ease-out forwards;
+  pointer-events: none;
+}
+
+/* ── NEW: Text reveal mask animation ─────────────────── */
+@keyframes text-reveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+.anim-text-reveal { animation: text-reveal 0.8s var(--ease-spring) both; }
+
+/* ── NEW: Orbit particle keyframe ────────────────────── */
+@keyframes orbit {
+  0%   { transform: rotate(0deg) translateX(var(--orbit-r, 60px)) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(var(--orbit-r, 60px)) rotate(-360deg); }
+}
+.orbit-particle {
+  position: absolute;
+  width: var(--particle-size, 4px);
+  height: var(--particle-size, 4px);
+  border-radius: 50%;
+  background: var(--particle-color, var(--primary));
+  box-shadow: 0 0 8px var(--particle-color, var(--primary));
+  animation: orbit var(--orbit-duration, 6s) linear infinite;
+  pointer-events: none;
+}
+
+/* ── NEW: Hero stat counter bounce ───────────────────── */
+@keyframes stat-bounce {
+  0%   { transform: translateY(16px); opacity: 0; }
+  60%  { transform: translateY(-4px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.anim-stat-bounce { animation: stat-bounce 0.5s var(--ease-spring) both; }
+
+/* ── NEW: CTA Section gradient background ────────────── */
+.cta-section {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(139,92,246,0.06) 50%, rgba(16,185,129,0.04) 100%);
+}
+.cta-section::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(59,130,246,0.12) 0%, transparent 60%),
+              radial-gradient(circle at 70% 60%, rgba(139,92,246,0.08) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 /* Animation utility classes */

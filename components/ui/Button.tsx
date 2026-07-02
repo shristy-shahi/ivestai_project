@@ -1,5 +1,6 @@
-import { ReactNode, ElementType, AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
+import { ReactNode, ButtonHTMLAttributes } from "react";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 
 type Variant = "primary" | "ghost" | "outline" | "success" | "danger";
 type Size = "sm" | "md" | "lg";
@@ -17,10 +18,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClass: Record<Variant, string> = {
   primary: "btn-primary",
-  ghost:   "btn-ghost",
+  ghost: "btn-ghost",
   outline: "btn-outline",
   success: "btn-success",
-  danger:  "btn-danger",
+  danger: "btn-danger",
 };
 
 const sizeClass: Record<Size, string> = {
@@ -61,9 +62,9 @@ export default function Button({
 
   if (as === "a" && href) {
     return (
-      <a href={href} className={classes} aria-disabled={disabled} style={{ textDecoration: "none" }}>
+      <Link href={href} className={classes} aria-disabled={disabled} style={{ textDecoration: "none" }}>
         {content}
-      </a>
+      </Link>
     );
   }
 

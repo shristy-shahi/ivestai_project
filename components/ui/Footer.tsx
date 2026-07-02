@@ -1,4 +1,5 @@
-import { BarChart2 } from "lucide-react";
+import InvestraLogo from "@/components/ui/InvestraLogo";
+import Link from "next/link";
 
 const FOOTER_LINKS = [
   { href: "/",        label: "Home"    },
@@ -31,23 +32,14 @@ export default function Footer() {
       >
         {/* Brand */}
         <div>
-          <a
+          <Link
             href="/"
             aria-label="Investra home"
             style={{ display: "inline-flex", alignItems: "center", gap: 9, marginBottom: 12, textDecoration: "none" }}
           >
-            <div
-              style={{
-                width: 26, height: 26, borderRadius: 7,
-                background: "linear-gradient(135deg, #3B82F6, #8B5CF6)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                boxShadow: "0 0 8px rgba(59,130,246,0.3)",
-              }}
-            >
-              <BarChart2 size={13} color="#fff" />
-            </div>
+             <InvestraLogo size={26} animated={false} showGlow={false} />
             <span style={{ fontSize: 15, fontWeight: 800, color: "var(--text-primary)" }}>Investra</span>
-          </a>
+          </Link>
 
           <p
             style={{ fontSize: 13, color: "var(--text-tertiary)", maxWidth: 340, lineHeight: 1.65, marginBottom: 16 }}
@@ -82,7 +74,7 @@ export default function Footer() {
           >
             {FOOTER_LINKS.map(({ href, label }) => (
               <li key={href}>
-                <a
+                <Link
                   href={href}
                   style={{
                     fontSize: 13, color: "var(--text-tertiary)",
@@ -93,7 +85,7 @@ export default function Footer() {
                   onMouseLeave={e => (e.currentTarget.style.color = "var(--text-tertiary)")}
                 >
                   {label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

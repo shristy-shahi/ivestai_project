@@ -27,11 +27,25 @@ export async function POST(req: NextRequest) {
 
   const encoder = new TextEncoder();
 
+  // Step descriptions for richer progress UI
+  const STEP_META: Record<string, { index: number; label: string }> = {
+    company_research:    { index: 1, label: "Researching company fundamentals" },
+    financial_analysis:  { index: 2, label: "Analysing financial statements" },
+    news_analysis:       { index: 3, label: "Scanning latest news & press" },
+    sentiment_analysis:  { index: 4, label: "Evaluating market sentiment" },
+    competitor_analysis: { index: 5, label: "Comparing competitors" },
+    risk_assessment:     { index: 6, label: "Assessing investment risks" },
+    recommendation:      { index: 7, label: "Building final recommendation" },
+  };
+  const TOTAL_STEPS = Object.keys(STEP_META).length;
+
   const stream = new ReadableStream({
     async start(controller) {
       const send = (data: object) => {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
       };
+
+      const startTime = Date.now();
 
       try {
         const graph = buildInvestmentGraph();
@@ -52,16 +66,27 @@ export async function POST(req: NextRequest) {
           error: null,
         };
 
+        send({ type: "started", company: company.trim(), totalSteps: TOTAL_STEPS, timestamp: new Date().toISOString() });
+
         for await (const event of await graph.stream(initialState as any, { streamMode: "updates" })) {
           const nodeName = Object.keys(event)[0];
           const nodeOutput = (event as any)[nodeName];
-          send({ type: "step_complete", step: nodeName, data: nodeOutput });
+          const meta = STEP_META[nodeName] || { index: 0, label: nodeName };
+          send({
+            type: "step_complete",
+            step: nodeName,
+            stepIndex: meta.index,
+            totalSteps: TOTAL_STEPS,
+            stepLabel: meta.label,
+            elapsedMs: Date.now() - startTime,
+            data: nodeOutput,
+          });
         }
 
-        send({ type: "complete" });
+        send({ type: "complete", elapsedMs: Date.now() - startTime });
         controller.close();
       } catch (err: any) {
-        send({ type: "error", message: err.message });
+        send({ type: "error", message: err.message, code: "AGENT_ERROR", elapsedMs: Date.now() - startTime });
         controller.close();
       }
     },

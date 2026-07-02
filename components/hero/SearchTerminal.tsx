@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useResearchStore } from "@/stores/useResearchStore";
 import { useAuth } from "@/lib/AuthContext";
-import { Search, ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2, Sparkles } from "lucide-react";
 
 const SUGGESTIONS = ["NVIDIA", "Apple", "Tesla", "Microsoft", "Google", "Amazon", "Meta", "Netflix"];
 
@@ -223,7 +223,7 @@ export default function SearchTerminal() {
           onClick={() => run(input)}
           disabled={isLoading || !input.trim()}
           aria-label={isLoading ? "Analysis in progress" : "Run analysis"}
-          className={`btn ${isLoading ? "btn-ghost" : "btn-primary"} btn-lg btn-full`}
+          className={`btn ${isLoading ? "btn-ghost" : "btn-primary"} btn-lg btn-full btn-ripple`}
           style={{ marginTop: 20, letterSpacing: "0.03em", position: "relative", zIndex: 1, overflow: "hidden" }}
         >
           {/* Shimmer on idle */}
@@ -232,7 +232,7 @@ export default function SearchTerminal() {
               aria-hidden="true"
               style={{
                 position: "absolute", top: 0, left: "-100%", width: "60%", height: "100%",
-                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)",
+                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
                 animation: "shimmer-sweep 2.5s ease-in-out infinite",
                 pointerEvents: "none",
               }}
@@ -245,12 +245,22 @@ export default function SearchTerminal() {
             </>
           ) : (
             <>
-              <Search size={16} />
+              <Sparkles size={16} />
               Run Analysis
               <ArrowRight size={16} />
             </>
           )}
         </button>
+
+        {/* Helper text */}
+        {!isLoading && (
+          <p style={{
+            textAlign: "center", marginTop: 10, fontSize: 11,
+            color: "var(--text-tertiary)", position: "relative", zIndex: 1,
+          }}>
+            Free tier includes 3 analyses per month · No credit card required
+          </p>
+        )}
       </div>
     </div>
   );
